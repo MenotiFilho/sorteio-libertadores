@@ -35,17 +35,42 @@ function Grupos() {
 
 		const updatedGroups = [...initialGroups];
 
-		for (let i = 0; i < 8; i++) {
-			const timeSorteado1 = shuffledPote1.pop()?.name;
-			const timeSorteado2 = shuffledPote2.pop()?.name;
-			const timeSorteado3 = shuffledPote3.pop()?.name;
-			const timeSorteado4 = shuffledPote4.pop()?.name;
+		// Find and remove the team with isHolder = true from its pot
+		const holderTeam = shuffledPote1.find((team) => team.isHolder);
+		if (holderTeam) {
+			const holderTeamIndex = shuffledPote1.indexOf(holderTeam);
+			shuffledPote1.splice(holderTeamIndex, 1);
+		}
 
-			if (timeSorteado1 && timeSorteado2 && timeSorteado3 && timeSorteado4) {
-				updatedGroups[i].teams.push(timeSorteado1);
-				updatedGroups[i].teams.push(timeSorteado2);
-				updatedGroups[i].teams.push(timeSorteado3);
-				updatedGroups[i].teams.push(timeSorteado4);
+		// Add the holder team to group A
+
+		for (let i = 0; i < groups.length; i++) {
+			// Start from group A
+
+			// Add the holder team as the first team in group A
+			if (groups[i].name === 'A') {
+				const timeSorteado2 = shuffledPote2.pop();
+				const timeSorteado3 = shuffledPote3.pop();
+				const timeSorteado4 = shuffledPote4.pop();
+				groups[i].teams.push(holderTeam.name);
+				groups[i].teams.push(timeSorteado2.name);
+				groups[i].teams.push(timeSorteado3.name);
+				groups[i].teams.push(timeSorteado4.name);
+			} else {
+				const timeSorteado1 = shuffledPote1.pop();
+				const timeSorteado2 = shuffledPote2.pop();
+				const timeSorteado3 = shuffledPote3.pop();
+				const timeSorteado4 = shuffledPote4.pop();
+				if (
+					timeSorteado1.nacionalidade === timeSorteado2.nacionalidade ||
+					timeSorteado3.nacionalidade ||
+					timeSorteado4.nacionalidade
+				) {
+				}
+				groups[i].teams.push(timeSorteado1.name);
+				groups[i].teams.push(timeSorteado2.name);
+				groups[i].teams.push(timeSorteado3.name);
+				groups[i].teams.push(timeSorteado4.name);
 			}
 		}
 
